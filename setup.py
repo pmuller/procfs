@@ -15,7 +15,7 @@ setup(
     long_description=LONG_DESCRIPTION,
     license='BSD',
     keywords='linux proc procfs system kernel',
-    url='http://packages.python.org/procsfs/',
+    url='http://packages.python.org/procfs/',
     platforms=['Linux'],
     classifiers=[
         'Development Status :: 3 - Alpha',
