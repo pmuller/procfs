@@ -11,11 +11,11 @@ setup(
     version=VERSION,
     packages=find_packages(),
     author='Philippe Muller',
-    description='Pythonic API for Linux /proc',
+    description='Python API for the Linux /proc virtual filesystem',
     long_description=LONG_DESCRIPTION,
     license='BSD',
     keywords='linux proc procfs system kernel',
-    url='http://packages.python.org/procfs/',
+    url='https://github.com/pmuller/procfs',
     platforms=['Linux'],
     classifiers=[
         'Development Status :: 3 - Alpha',
