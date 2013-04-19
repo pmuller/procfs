@@ -26,6 +26,33 @@ class dev(ProcessFile):
         return result
 
 
+class route(ProcessFile):
+    """/proc/<pid>/net/route
+    """
+
+    def _parse(self, data):
+        lines = data.splitlines()
+        header = lines.pop(0)
+        header = header.lower()
+        keys = header.split()
+        keys.pop(0)
+        result = Dict()
+        for line in lines:
+            interface, str_values = line.split('\t', 1)
+            interface = interface.strip()
+            str_values = str_values.strip().split('\t')
+            if str_values[0] == "00000000":
+                entry = {'defaultgw':str_values[1]}
+            else:
+                entry = Dict(zip(keys, str_values))
+
+            if result.has_key(interface):
+                result[interface].update(entry)
+            else:
+                result[interface] = entry
+        return result
+
+
 class _BaseStats(ProcessFile):
     """Parser for /proc/<pid>/net/snmp and /proc/<pid>/net/netstat
     """
