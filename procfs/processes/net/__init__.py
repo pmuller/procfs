@@ -35,20 +35,20 @@ class route(ProcessFile):
         header = lines.pop(0)
         header = header.lower()
         keys = header.split()
-        keys.pop(0)
+        keys.pop(1)
         result = Dict()
         for line in lines:
             values = line.split()
-            interface = values.pop(0)
-            if values[0] == "00000000":
-                entry = Dict({'defaultgw': values[1]})
+            destination = values.pop(1)
+            entry = Dict(zip(keys, values))
+            if destination == "00000000":
+                if result.has_key(destination):
+                    result[destination].append(entry)
+                else:
+                    result[destination] = [entry]
             else:
-                entry = Dict(zip(keys, values))
+                result[destination] = entry
 
-            if result.has_key(interface):
-                result[interface].update(entry)
-            else:
-                result[interface] = entry
         return result
 
 
