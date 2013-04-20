@@ -38,13 +38,12 @@ class route(ProcessFile):
         keys.pop(0)
         result = Dict()
         for line in lines:
-            interface, str_values = line.split('\t', 1)
-            interface = interface.strip()
-            str_values = str_values.strip().split('\t')
-            if str_values[0] == "00000000":
-                entry = {'defaultgw':str_values[1]}
+            values = line.split()
+            interface = values.pop(0)
+            if values[0] == "00000000":
+                entry = Dict({'defaultgw': values[1]})
             else:
-                entry = Dict(zip(keys, str_values))
+                entry = Dict(zip(keys, values))
 
             if result.has_key(interface):
                 result[interface].update(entry)
