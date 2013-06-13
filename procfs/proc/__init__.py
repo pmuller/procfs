@@ -124,9 +124,17 @@ class stat(File):
                 result[key] = map(int, value.split())
             else:
                 result[key] = int(value)
-        result['intr'] = self.__parse_list_with_total(result['intr'])
-        result['softirq'] = self.__parse_list_with_total(result['softirq'])
-        result['btime'] = datetime.fromtimestamp(result['btime'])
+
+        parsers = {
+            'intr': lambda value: self.__parse_list_with_total(value),
+            'softirq': lambda value: self.self.__parse_list_with_total(value),
+            'btime': datetime.fromtimestamp
+        }
+
+        for key, parser in parsers.iteritems():
+            value = result.get(key)
+            if value is not None:
+                result[key] = parser(value)
 
         return result
 
