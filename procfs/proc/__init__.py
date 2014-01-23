@@ -127,7 +127,7 @@ class stat(File):
 
         parsers = {
             'intr': lambda value: self.__parse_list_with_total(value),
-            'softirq': lambda value: self.self.__parse_list_with_total(value),
+            'softirq': lambda value: self.__parse_list_with_total(value),
             'btime': datetime.fromtimestamp
         }
 
