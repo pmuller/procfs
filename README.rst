@@ -1,6 +1,20 @@
 procfs
 ------
 
+.. image:: https://pypip.in/download/procfs/badge.png
+    :target: https://pypi.python.org/pypi//procfs/
+    :alt: Downloads
+
+.. image:: https://pypip.in/version/procfs/badge.png
+    :target: https://pypi.python.org/pypi/procfs/
+    :alt: Latest Version
+
+.. image:: https://pypip.in/license/procfs/badge.png
+    :target: https://pypi.python.org/pypi/procfs/
+    :alt: License
+
+
+
 Easy to use
 ```````````
 
