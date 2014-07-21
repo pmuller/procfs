@@ -21,6 +21,9 @@ setup(
     keywords='linux proc procfs system kernel',
     url='https://github.com/pmuller/procfs',
     platforms=['Linux'],
+    entry_points={
+        'console_scripts': [
+            'procfs = procfs.cli:run',]},
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: System Administrators',
