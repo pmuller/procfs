@@ -21,7 +21,7 @@ def run():
 	obj = Proc()
 	path = args.path
 	failed = -1
-	
+
 	for (k, v) in enumerate(path.split('/')):
 		try:
 			obj = obj.__getitem__(v)
@@ -31,10 +31,10 @@ def run():
 		except AttributeError:
 			failed = k
 			break
-	
+
 	if callable(obj):
 		obj = obj()
-	
+
 	if failed != -1:
 		for (k, v) in enumerate(path.split('/')):
 			if k < failed:
@@ -53,13 +53,10 @@ def run():
 			except AttributeError:
 				sys.stderr.write('failed to get specific path; getting parent(s)\n')
 				break
-	
+
 	if args.list:
 		if isinstance(obj, dict):
-			keys = []
-			for key in obj:
-				keys.append(key)
-			print json.dumps(keys)
+			print json.dumps(obj.keys())
 		elif isinstance(obj, ProcDirectory):
 			keys = []
 			for key in obj.__dir__():
