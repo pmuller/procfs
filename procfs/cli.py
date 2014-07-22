@@ -35,7 +35,8 @@ def run():
 			failed = k
 			break
 	
-	obj = obj()
+	if callable(obj):
+		obj = obj()
 	
 	if failed != -1:
 		for (k, v) in enumerate(path.split('/')):
