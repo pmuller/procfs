@@ -15,11 +15,8 @@ from procfs.exceptions import DoesNotExist
 def run():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('path', metavar='PATH', type=str, nargs='?', default="", help='procfs path')
+	parser.add_argument('-l', '--list', help='list all available keys', action='store_true')
 	args = parser.parse_args()
-
-	if len(args.path) == 0:
-		sys.stderr.write('no arguments specified - run with -h for help.\n')
-		return
 
 	obj = Proc()
 	path = args.path
@@ -57,5 +54,16 @@ def run():
 				sys.stderr.write('failed to get specific path; getting parent(s)\n')
 				break
 	
-	print obj
+	if args.list:
+		if isinstance(obj, dict):
+			for key in obj:
+				print key
+		elif isinstance(obj, ProcDirectory):
+			for key in obj.__dir__():
+				print key		
+		else:
+			sys.stderr.write('requested path does not hold a dictionary!\n')
+			sys.exit(1)
+	else:
+		print obj
 	return
