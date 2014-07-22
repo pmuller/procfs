@@ -56,11 +56,15 @@ def run():
 	
 	if args.list:
 		if isinstance(obj, dict):
+			keys = []
 			for key in obj:
-				print key
+				keys.append(key)
+			print json.dumps(keys)
 		elif isinstance(obj, ProcDirectory):
+			keys = []
 			for key in obj.__dir__():
-				print key		
+				keys.append(key)
+			print json.dumps(keys)
 		else:
 			sys.stderr.write('requested path does not hold a dictionary!\n')
 			sys.exit(1)
