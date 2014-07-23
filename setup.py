@@ -24,7 +24,7 @@ setup(
     entry_points={
         'console_scripts': [
             'procfs = procfs.cli:run',
-            'procfshttp = procfs.http:run',
+            'procfsd = procfs.http:run',
         ]},
     classifiers=[
         'Development Status :: 3 - Alpha',
