@@ -6,6 +6,7 @@ import string
 
 from procfs import Proc
 from procfs.core import ProcDirectory
+from procfs.core import ProcessDirectory
 from procfs.core import ProcessFile
 from procfs.core import File
 
@@ -13,34 +14,31 @@ from procfs.exceptions import DoesNotExist
 
 def find(path, list):
     obj = Proc()
-    failed = -1
 
     for (k, v) in enumerate(path.split('/')):
+        if k == 0 and v.isdigit():
+            obj = obj.processes(int(v))
+            continue
         try:
-            obj = obj.__getitem__(v)
+            obj = obj.__getattr__(v)
         except (KeyError, DoesNotExist, AttributeError) as e:
-            failed = k
-            break
-
-    if callable(obj):
-        obj = obj()
-
-    if failed != -1:
-        for (k, v) in enumerate(path.split('/')):
-            if k < failed:
-                continue
             try:
-                obj = obj.__getitem__(v)
-            except (KeyError, DoesNotExist, AttributeError) as e:
+                obj = obj.__getattr__(int(v))
+            except (KeyError, ValueError, DoesNotExist, AttributeError) as e:
                 try:
-                    obj = obj.__getitem__(int(v))
-                except (KeyError, ValueError, DoesNotExist, AttributeError) as e:
-                    raise DoesNotExist(path)
+                    obj = obj.__getitem__(v)
+                except (KeyError, DoesNotExist, AttributeError) as e:
+                    try:
+                        obj = obj.__getitem__(int(v))
+                    except (KeyError, ValueError, DoesNotExist, AttributeError) as e:
+                        raise DoesNotExist(path)
+        if callable(obj):
+            obj = obj()
 
     if list:
         if isinstance(obj, dict):
             return json.dumps(obj.keys())
-        elif isinstance(obj, ProcDirectory):
+        elif isinstance(obj, ProcDirectory) or isinstance(obj, ProcessDirectory):
             keys = []
             for key in obj.__dir__():
                 keys.append(key)
@@ -48,7 +46,7 @@ def find(path, list):
         else:
             raise AttributeError(path)
 
-    if isinstance(obj, ProcDirectory):
+    if isinstance(obj, ProcDirectory) or isinstance(obj, ProcessDirectory):
         keys = []
         for key in obj.__dir__():
             keys.append(key)
