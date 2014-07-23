@@ -15,43 +15,18 @@ from procfs.core import File
 
 from procfs.exceptions import DoesNotExist
 
+from procfs import cli
+
 class ProcFSHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         obj = Proc()
         path = self.path[1:]
-        failed = -1
 
-        for (k, v) in enumerate(path.split('/')):
-            try:
-                obj = obj.__getitem__(v)
-            except (DoesNotExist, AttributeError) as e:
-                failed = k
-                break
-
-        if callable(obj):
-            obj = obj()
-
-        if failed != -1:
-            for (k, v) in enumerate(path.split('/')):
-                if k < failed:
-                    continue
-                try:
-                    obj = obj.__getattr__(v)
-                except (KeyError, DoesNotExist, AttributeError) as e:
-                    try:
-                        obj = obj.__getattr__(int(v))
-                    except (KeyError, ValueError, DoesNotExist, AttributeError) as e:
-                        self.send_error(404, "no such path")
-                        return
-
-        if isinstance(obj, ProcDirectory):
-            keys = []
-            for key in obj.__dir__():
-                keys.append(key)
-            obj = keys
-
-        self.send_response(200, json.dumps(obj))
+        try:
+            self.send_response(200, cli.find(path, False))
+        except DoesNotExist as e:
+            self.send_response(404, "path %s does not exist" % e)
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
     pass

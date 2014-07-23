@@ -11,15 +11,8 @@ from procfs.core import File
 
 from procfs.exceptions import DoesNotExist
 
-
-def run():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('path', metavar='PATH', type=str, nargs='?', default="", help='procfs path')
-    parser.add_argument('-l', '--list', help='list all available keys', action='store_true')
-    args = parser.parse_args()
-
+def find(path, list):
     obj = Proc()
-    path = args.path
     failed = -1
 
     for (k, v) in enumerate(path.split('/')):
@@ -42,25 +35,38 @@ def run():
                 try:
                     obj = obj.__getattr__(int(v))
                 except (KeyError, ValueError, DoesNotExist, AttributeError) as e:
-                    sys.stderr.write('no such attribute %s\n' % v)
-                    sys.exit(1)
+                    raise DoesNotExist(path)
 
-    if args.list:
+    if list:
         if isinstance(obj, dict):
-            print json.dumps(obj.keys())
+            return json.dumps(obj.keys())
         elif isinstance(obj, ProcDirectory):
             keys = []
             for key in obj.__dir__():
                 keys.append(key)
-            print json.dumps(keys)
+            return json.dumps(keys)
         else:
-            sys.stderr.write('requested path does not hold a dictionary!\n')
-            sys.exit(1)
-    else:
-        if isinstance(obj, ProcDirectory):
-            keys = []
-            for key in obj.__dir__():
-                keys.append(key)
-            obj = keys
-        print json.dumps(obj)
+            raise AttributeError(path)
+
+    if isinstance(obj, ProcDirectory):
+        keys = []
+        for key in obj.__dir__():
+            keys.append(key)
+        obj = keys
+    return json.dumps(obj)
+
+def run():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('path', metavar='PATH', type=str, nargs='?', default="", help='procfs path')
+    parser.add_argument('-l', '--list', help='list all available keys', action='store_true')
+    args = parser.parse_args()
+
+    try:
+        print find(args.path, args.list)
+    except DoesNotExist as e:
+        print "couldn't find path %s" % e
+        sys.exit(1)
+    except AttributeError as e:
+        print "%s is not a list!" % e
+        sys.exit(1)
     return
