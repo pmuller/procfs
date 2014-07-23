@@ -4,6 +4,8 @@ import os
 import sys
 import string
 
+from datetime import timedelta
+
 from procfs import Proc
 from procfs.core import ProcDirectory
 from procfs.core import ProcessDirectory
@@ -11,6 +13,12 @@ from procfs.core import ProcessFile
 from procfs.core import File
 
 from procfs.exceptions import DoesNotExist
+
+class CustomEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, timedelta):
+            return obj.total_seconds()
+        return json.JSONEncoder.default(self, obj)
 
 def find(path, list):
     obj = Proc()
@@ -37,12 +45,12 @@ def find(path, list):
 
     if list:
         if isinstance(obj, dict):
-            return json.dumps(obj.keys())
+            return json.dumps(obj.keys(), cls=CustomEncoder)
         elif isinstance(obj, ProcDirectory) or isinstance(obj, ProcessDirectory):
             keys = []
             for key in obj.__dir__():
                 keys.append(key)
-            return json.dumps(keys)
+            return json.dumps(keys, cls=CustomEncoder)
         else:
             raise AttributeError(path)
 
@@ -51,7 +59,7 @@ def find(path, list):
         for key in obj.__dir__():
             keys.append(key)
         obj = keys
-    return json.dumps(obj)
+    return json.dumps(obj, cls=CustomEncoder)
 
 def run():
     parser = argparse.ArgumentParser()
