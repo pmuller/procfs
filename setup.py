@@ -23,7 +23,9 @@ setup(
     platforms=['Linux'],
     entry_points={
         'console_scripts': [
-            'procfs = procfs.cli:run',]},
+            'procfs = procfs.cli:run',
+            'procfsd = procfs.http:run',
+        ]},
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: System Administrators',
