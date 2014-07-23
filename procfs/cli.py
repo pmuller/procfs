@@ -18,7 +18,7 @@ def find(path, list):
     for (k, v) in enumerate(path.split('/')):
         try:
             obj = obj.__getitem__(v)
-        except (DoesNotExist, AttributeError) as e:
+        except (KeyError, DoesNotExist, AttributeError) as e:
             failed = k
             break
 
@@ -30,10 +30,10 @@ def find(path, list):
             if k < failed:
                 continue
             try:
-                obj = obj.__getattr__(v)
+                obj = obj.__getitem__(v)
             except (KeyError, DoesNotExist, AttributeError) as e:
                 try:
-                    obj = obj.__getattr__(int(v))
+                    obj = obj.__getitem__(int(v))
                 except (KeyError, ValueError, DoesNotExist, AttributeError) as e:
                     raise DoesNotExist(path)
 
