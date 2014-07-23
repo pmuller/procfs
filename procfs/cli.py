@@ -25,10 +25,7 @@ def run():
     for (k, v) in enumerate(path.split('/')):
         try:
             obj = obj.__getitem__(v)
-        except DoesNotExist:
-            failed = k
-            break
-        except AttributeError:
+        except (DoesNotExist, AttributeError) as e:
             failed = k
             break
 
@@ -41,18 +38,12 @@ def run():
                 continue
             try:
                 obj = obj.__getattr__(v)
-            except KeyError:
+            except (KeyError, DoesNotExist, AttributeError) as e:
                 try:
                     obj = obj.__getattr__(int(v))
-                except ValueError:
+                except (KeyError, ValueError, DoesNotExist, AttributeError) as e:
                     sys.stderr.write('no such attribute %s\n' % v)
                     sys.exit(1)
-                except AttributeError:
-                    sys.stderr.write('no such attribute %s\n' % v)
-                    sys.exit(1)
-            except AttributeError:
-                sys.stderr.write('no such attribute %s\n' % v)
-                sys.exit(1)
 
     if args.list:
         if isinstance(obj, dict):
@@ -70,7 +61,6 @@ def run():
             keys = []
             for key in obj.__dir__():
                 keys.append(key)
-            print json.dumps(keys)
-        else:
-            print json.dumps(obj)
+            obj = keys
+        print json.dumps(obj)
     return
