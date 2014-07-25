@@ -24,9 +24,13 @@ class ProcFSHandler(BaseHTTPRequestHandler):
         path = self.path[1:]
 
         try:
-            self.send_response(200, cli.find(path, False))
+            response = cli.find(path, False)
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(response)
         except DoesNotExist as e:
-            self.send_response(404, "path %s does not exist" % e)
+            self.send_error(404, "path %s does not exist" % e)
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
     pass
@@ -39,4 +43,8 @@ def run():
 
     server = ThreadedHTTPServer((args.bind, args.port), ProcFSHandler)
     print 'Starting server on %s:%d - use <Ctrl-C> to stop' % (server.server_address)
-    server.serve_forever()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    server.server_close()
