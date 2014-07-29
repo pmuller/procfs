@@ -1,20 +1,11 @@
+
 import argparse
-import json
-import os
-import sys
-import string
-import socket
 
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from SocketServer import ThreadingMixIn
 
 from procfs import Proc
-from procfs.core import ProcDirectory
-from procfs.core import ProcessFile
-from procfs.core import File
-
 from procfs.exceptions import DoesNotExist
-
 from procfs import cli
 
 class ProcFSHandler(BaseHTTPRequestHandler):
