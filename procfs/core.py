@@ -8,7 +8,7 @@ from datetime import datetime
 from pprint import pformat
 
 from procfs.exceptions import \
-    PathNotFoundError, UnknownProcess, NoParentProcess, PathNotADirectoryError, PathNotAFileError
+    PathNotFoundError, UnknownProcessError, NoParentProcess, PathNotADirectoryError, PathNotAFileError
 from procfs.utils import get_module
 
 
@@ -310,7 +310,7 @@ class Process(ProcessDirectory):
     def __init__(self, id):
         path = '/proc/%s' % id
         if not os.path.isdir(path):
-            raise UnknownProcess(id)
+            raise UnknownProcessError(id)
         super(Process, self).__init__(id, path)
 
     def __repr__(self):

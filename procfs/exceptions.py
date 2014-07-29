@@ -21,7 +21,7 @@ class ProcessException(BaseException):
     """Exceptions raised by process handling code"""
 
 
-class UnknownProcess(ProcessException):
+class UnknownProcessError(ProcessException):
     """The process does not exist"""
 
 
