@@ -54,9 +54,11 @@ class BaseFile(object):
             data = self._read()
             if isinstance(data, dict) and attr in data:
                 return data[attr]
-            if hasattr(data, attr):
-                return getattr(data, attr)
-            raise AttributeError(attr)
+            if isinstance(attr, basestring):
+                if hasattr(data, attr):
+                    return getattr(data, attr)
+                raise AttributeError(attr)
+            return None
         raise AttributeError(attr)
     __getitem__ = __getattr__
 
