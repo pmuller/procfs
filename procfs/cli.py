@@ -17,7 +17,8 @@ from procfs.exceptions import DoesNotExist
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, timedelta):
-            return obj.total_seconds()
+            return ((obj.microseconds + 
+                     (obj.seconds + obj.days * 24 * 3600) * 10**6) / 10**6)
         return json.JSONEncoder.default(self, obj)
 
 def find(path, list):
