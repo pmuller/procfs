@@ -1,16 +1,13 @@
+
 import argparse
 import json
-import os
 import sys
-import string
 
 from datetime import timedelta
 
 from procfs import Proc
 from procfs.core import ProcDirectory
 from procfs.core import ProcessDirectory
-from procfs.core import ProcessFile
-from procfs.core import File
 
 from procfs.exceptions import DoesNotExist
 
