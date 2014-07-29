@@ -8,7 +8,7 @@ from datetime import datetime
 from pprint import pformat
 
 from procfs.exceptions import \
-    PathNotFoundError, UnknownProcess, NoParentProcess, NotDirectory, NotFile
+    PathNotFoundError, UnknownProcess, NoParentProcess, PathNotADirectoryError, NotFile
 from procfs.utils import get_module
 
 
@@ -112,7 +112,7 @@ class BaseDirectory(object):
         if not os.path.exists(path):
             raise PathNotFoundError(path)
         elif not os.path.isdir(path):
-            raise NotDirectory(path)
+            raise PathNotADirectoryError(path)
         self._dir = path
 
     def __getattr__(self, attr):

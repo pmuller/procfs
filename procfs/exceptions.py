@@ -9,7 +9,7 @@ class PathNotFoundError(BaseException):
     """The path does not exist"""
 
 
-class NotDirectory(BaseException):
+class PathNotADirectoryError(BaseException):
     """The path is not a directory"""
 
 
