@@ -116,7 +116,7 @@ class BaseDirectory(object):
         self._dir = path
 
     def __getattr__(self, attr):
-        path = os.path.join(self._dir, attr)
+        path = os.path.join(self._dir, str(attr))
         if not os.path.exists(path):
             raise DoesNotExist(path)
         elif os.path.islink(path):
@@ -161,6 +161,9 @@ class BaseDirectory(object):
 
     def _call_file_handler(self, handler):
         return handler()
+
+    def __dir__(self):
+        return os.listdir(self._dir)
 
 
 class ProcDirectory(BaseDirectory):
