@@ -14,12 +14,14 @@ from procfs.core import File
 
 from procfs.exceptions import DoesNotExist
 
+
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, timedelta):
-            return ((obj.microseconds + 
+            return ((obj.microseconds +
                      (obj.seconds + obj.days * 24 * 3600) * 10**6) // 10**6)
         return json.JSONEncoder.default(self, obj)
+
 
 def find(path, list):
     obj = Proc()
@@ -39,7 +41,8 @@ def find(path, list):
                 except (KeyError, DoesNotExist, AttributeError) as e:
                     try:
                         obj = obj.__getitem__(int(v))
-                    except (KeyError, ValueError, DoesNotExist, AttributeError) as e:
+                    except (KeyError, ValueError,
+                            DoesNotExist, AttributeError) as e:
                         raise DoesNotExist(path)
         if callable(obj):
             obj = obj()
@@ -47,7 +50,8 @@ def find(path, list):
     if list:
         if isinstance(obj, dict):
             return json.dumps(obj.keys(), cls=CustomEncoder)
-        elif isinstance(obj, ProcDirectory) or isinstance(obj, ProcessDirectory):
+        elif isinstance(obj, ProcDirectory) \
+                or isinstance(obj, ProcessDirectory):
             keys = []
             for key in obj.__dir__():
                 keys.append(key)
@@ -62,10 +66,13 @@ def find(path, list):
         obj = keys
     return json.dumps(obj, cls=CustomEncoder)
 
+
 def run():
     parser = argparse.ArgumentParser()
-    parser.add_argument('path', metavar='PATH', type=str, nargs='?', default="", help='procfs path')
-    parser.add_argument('-l', '--list', help='list all available keys', action='store_true')
+    parser.add_argument('path', metavar='PATH', type=str, nargs='?',
+                        default="", help='procfs path')
+    parser.add_argument('-l', '--list', help='list all available keys',
+                        action='store_true')
     args = parser.parse_args()
 
     try:

@@ -9,7 +9,7 @@ class dev(ProcessFile):
 
     def _parse(self, data):
         lines = data.splitlines()
-        lines.pop(0) 
+        lines.pop(0)
         header = lines.pop(0)
         _, rcv_header, tx_header = header.split('|')
         rcv_keys = rcv_header.split()
@@ -42,7 +42,7 @@ class route(ProcessFile):
             destination = values.pop(1)
             entry = Dict(zip(keys, values))
             if destination == "00000000":
-                if result.has_key(destination):
+                if destination in result:
                     result[destination].append(entry)
                 else:
                     result[destination] = [entry]
@@ -87,7 +87,7 @@ class _TcpUdpBase(ProcessFile):
 
     def _parse_addr(self, addr):
         hex_addr, hex_port = addr.split(':', 1)
-        ipaddr = '.'.join(map(lambda x: str(int(x, 16)), 
+        ipaddr = '.'.join(map(lambda x: str(int(x, 16)),
                               (addr[6:8], addr[4:6], addr[2:4], addr[:2])))
         port = int(hex_port, 16)
         return ipaddr, port
@@ -113,7 +113,7 @@ class tcp(_TcpUdpBase):
     def _parse(self, data):
         lines = data.splitlines()
         header = lines.pop(0).split()
-        header.pop(0) # skip "sl" 
+        header.pop(0)  # skip "sl"
         header.append('other')
         result = {}
         for line in lines:
@@ -132,7 +132,7 @@ class tcp(_TcpUdpBase):
             inode = int(inode)
             result[slot] = Dict(zip(header, ((local_addr, local_port),
                                              (remote_addr, remote_port),
-                                             st, tx_queue, rx_queue, tr, 
+                                             st, tx_queue, rx_queue, tr,
                                              tm_when, retrnsmt, uid, timeout,
                                              inode, other)))
         return result
@@ -145,11 +145,11 @@ class udp(_TcpUdpBase):
     def _parse(self, data):
         lines = data.splitlines()
         header = lines.pop(0).split()
-        header.pop(0) # skip "sl" 
+        header.pop(0)  # skip "sl"
         result = {}
         for line in lines:
-            (slot, local_address, rem_address, st, tx_rx_queue, 
-             tr_tm_when, retrnsmt, uid, timeout, inode, ref, 
+            (slot, local_address, rem_address, st, tx_rx_queue,
+             tr_tm_when, retrnsmt, uid, timeout, inode, ref,
              pointer, drops) = line.split()
             local_addr, local_port = self._parse_addr(local_address)
             remote_addr, remote_port = self._parse_addr(rem_address)
@@ -160,11 +160,11 @@ class udp(_TcpUdpBase):
             timeout = int(timeout)
             inode = int(inode)
             result[slot] = Dict(
-                            zip(header, ((local_addr, local_port),
-                                         (remote_addr, remote_port),
-                                         st, tx_queue, rx_queue, tr, tm_when,
-                                         retrnsmt, uid, timeout, inode, ref,
-                                         pointer, drops)))
+                zip(header, ((local_addr, local_port),
+                             (remote_addr, remote_port),
+                             st, tx_queue, rx_queue, tr, tm_when,
+                             retrnsmt, uid, timeout, inode, ref,
+                             pointer, drops)))
         return result
 
 
@@ -199,7 +199,7 @@ class dev_mcast(ProcessFile):
                 result[interface]['addresses'].append(address)
             else:
                 result[interface] = Dict(index=int(index),
-                                         users=int(users), 
+                                         users=int(users),
                                          gusers=int(gusers),
                                          addresses=[address])
         return result

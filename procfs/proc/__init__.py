@@ -88,6 +88,7 @@ class uptime(File):
         return Dict(uptime=timedelta(seconds=float(uptime)),
                     idle=timedelta(seconds=float(idle)))
 
+
 class stat(File):
     """/proc/stat
     """
@@ -95,7 +96,7 @@ class stat(File):
     def _parse(self, content):
         lines = content.splitlines()
         result = Dict(cpu=Dict())
-        
+
         cpu_lines, other_lines = [], []
         for line in lines:
             if line.startswith('cpu'):
@@ -153,9 +154,9 @@ class loadavg(File):
         la1mn, la5mn, la15mn, entities, last_pid = content.split()
         # Kernel scheduling entities (ie. Process/Thread)
         current, total = map(int, entities.split('/', 1))
-        return Dict(average={ 1: float(la1mn), 
-                              5: float(la5mn), 
-                              15: float(la15mn) },
+        return Dict(average={1: float(la1mn),
+                             5: float(la5mn),
+                             15: float(la15mn)},
                     entities=Dict(current=current, total=total),
                     last_pid=int(last_pid))
 
@@ -166,7 +167,7 @@ class partitions(File):
 
     def _parse(self, content):
         lines = content.splitlines()
-        lines = lines[2:] # skip header
+        lines = lines[2:]  # skip header
         result = Dict()
         for line in lines:
             major, minor, blocks, name = line.split()
@@ -181,7 +182,7 @@ class softirqs(File):
 
     def _parse(self, content):
         lines = content.splitlines()
-        cpus = [ int(cpu.split('CPU', 1)[1]) for cpu in lines.pop(0).split() ]
+        cpus = [int(cpu.split('CPU', 1)[1]) for cpu in lines.pop(0).split()]
         keys = cpus + ['total']
         result = Dict()
         for line in lines:
@@ -199,7 +200,7 @@ class interrupts(File):
 
     def _parse(self, content):
         lines = content.splitlines()
-        cpus = [ int(cpu.split('CPU', 1)[1]) for cpu in lines.pop(0).split() ]
+        cpus = [int(cpu.split('CPU', 1)[1]) for cpu in lines.pop(0).split()]
         keys = cpus + ['total', 'info']
         result = Dict()
         for line in lines:
@@ -240,7 +241,7 @@ class diskstats(File):
     """/proc/diskstats
     """
 
-    __keys = ('read__completed', 'read__merged', 'read__sectors', 
+    __keys = ('read__completed', 'read__merged', 'read__sectors',
               'read__milliseconds', 'write__completed', 'write__merged',
               'write__sectors', 'write__milliseconds', 'io__in_progress',
               'io__milliseconds', 'io__weighted_milliseconds')
@@ -269,7 +270,7 @@ class slabinfo(File):
               'active_slabs', 'num_slabs', 'sharedavail')
 
     def _parse(self, content):
-        lines = content.splitlines()[2:] # skip header
+        lines = content.splitlines()[2:]  # skip header
         result = Dict()
         for line in lines:
             parts = line.split()

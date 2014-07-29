@@ -37,8 +37,8 @@ class mounts(ProcessFile):
             data['options'] = Dict()
             for option in options:
                 option = option.split('=', 1)
-                data['options'][option[0]] = True if len(option) == 1 \
-                                                  else option[1]
+                data['options'][option[0]] = \
+                    True if len(option) == 1 else option[1]
             mount_point = data.pop('mount_point')
             result[mount_point] = data
         return result
@@ -100,9 +100,9 @@ class stat(ProcessFile):
 
     def _parse(self, data):
         header = """pid tcomm state ppid pgrp sid tty_nr tty_pgrp
-        flags min_flt cmin_flt maj_flt cmaj_flt utime stime cutime 
+        flags min_flt cmin_flt maj_flt cmaj_flt utime stime cutime
         cstime priority nice num_threads _ start_time vsize rss
-        rsslim start_code end_code start_stack esp eip pending 
+        rsslim start_code end_code start_stack esp eip pending
         blocked sigign sigcatch wchan _ _ exit_signal task_cpu
         rt_priority policy blkio_ticks gtime cgtime"""
         header = header.split()
@@ -143,16 +143,13 @@ class smaps(ProcessFile):
         result = Dict()
         capture_values = False
         for line in data.splitlines():
-            #print 'line', line
             match = self.__re_section.match(line)
-            #print 'match', match.groupdict() if match else None
             if match:
                 data = match.groupdict()
                 pathname = data.pop('pathname')
                 if pathname:
                     if pathname[1:-1] in ('heap', 'stack', 'vdso', 'vsyscall'):
                         pathname = pathname[1:-1]
-                        #print 'pathname: "%s"' % pathname, 'start'
                         for key in ('start', 'end', 'offset'):
                             data[key] = int(data[key], 16)
                         dev_major, dev_minor = data['device'].split(':', 1)
@@ -161,14 +158,11 @@ class smaps(ProcessFile):
                         result[pathname] = Dict(data)
                         capture_values = True
                     else:
-                        #print 'pathname: "%s"' % pathname, 'stop'
                         capture_values = False
                 else:
                     capture_values = False
             elif capture_values:
                 key, value = line.split(':', 1)
-                #print 'capture', pathname, key, value
                 value = int(value.split(' kB', 1)[0].strip())
-                #print 'capture', pathname, key, value
                 result[pathname][key] = value
         return result

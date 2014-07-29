@@ -13,11 +13,6 @@ class _BaseNfs(ProcessFile):
     """Base class for parsing /proc/net/rpc/nfs and /proc/net/rpc/nfsd
     """
 
-    #_human_friendly_types = {'rc': 'reply_cache',
-    #                         'fh': 'filehandle',
-    #                         'th': 'threads',
-    #                         'ra': 'read_ahead'}
-
     def _parse(self, data):
         lines = data.splitlines()
         result = Dict()
@@ -32,8 +27,6 @@ class _BaseNfs(ProcessFile):
                     parser = int
                 values.append(parser(value))
             parser_name = '_parse_%s' % type_
-            #if type_ in self._human_friendly_types:
-            #    type_ = self._human_friendly_types[type_]
             if hasattr(self, parser_name):
                 parser = getattr(self, parser_name)
                 values = parser(*values)

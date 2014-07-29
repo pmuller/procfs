@@ -17,6 +17,7 @@ from procfs.exceptions import DoesNotExist
 
 from procfs import cli
 
+
 class ProcFSHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
@@ -32,17 +33,22 @@ class ProcFSHandler(BaseHTTPRequestHandler):
         except DoesNotExist as e:
             self.send_error(404, "path %s does not exist" % e)
 
+
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
     pass
 
+
 def run():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-b', '--bind', help='bind to address', type=str, default='0.0.0.0')
-    parser.add_argument('-p', '--port', help='port to bind to', type=int, default=8080)
+    parser.add_argument('-b', '--bind', help='bind to address',
+                        type=str, default='0.0.0.0')
+    parser.add_argument('-p', '--port', help='port to bind to',
+                        type=int, default=8080)
     args = parser.parse_args()
 
     server = ThreadedHTTPServer((args.bind, args.port), ProcFSHandler)
-    print 'Starting server on %s:%d - use <Ctrl-C> to stop' % (server.server_address)
+    print 'Starting server on %s:%d - use <Ctrl-C> to stop' \
+        % server.server_address
     try:
         server.serve_forever()
     except KeyboardInterrupt:
