@@ -26,7 +26,7 @@ Easy to use
     >>> proc.loadavg
     {'average': {1: 0.0, 5: 0.0, 15: 0.0},
      'entities': {'current': 1, 'total': 117},
-      'last_pid': 3068}
+     'last_pid': 3068}
 
     >>> proc.net.dev.eth1.receive.bytes
     117997558
