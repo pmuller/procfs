@@ -8,7 +8,7 @@ from datetime import datetime
 from pprint import pformat
 
 from procfs.exceptions import \
-    PathNotFoundError, UnknownProcess, NoParentProcess, PathNotADirectoryError, NotFile
+    PathNotFoundError, UnknownProcess, NoParentProcess, PathNotADirectoryError, PathNotAFileError
 from procfs.utils import get_module
 
 
@@ -28,11 +28,11 @@ class BaseFile(object):
 
     def __init__(self, filepath):
         if not isinstance(filepath, basestring):
-            raise NotFile(filepath)
+            raise PathNotAFileError(filepath)
         elif not os.path.exists(filepath):
             raise PathNotFoundError(filepath)
         elif not os.path.isfile(filepath):
-            raise NotFile(filepath)
+            raise PathNotAFileError(filepath)
         self._filepath = filepath
         self._file = None
 

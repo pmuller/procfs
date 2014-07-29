@@ -13,7 +13,7 @@ class PathNotADirectoryError(BaseException):
     """The path is not a directory"""
 
 
-class NotFile(BaseException):
+class PathNotAFileError(BaseException):
     """The path is not a file"""
 
 
