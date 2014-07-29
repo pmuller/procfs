@@ -117,7 +117,4 @@ def test_diskstats(proc):
     assert len(proc.diskstats.keys())
 
 def test_vmstat(proc):
-    assert len(proc.vmstat.keys()) > 100
-
-
-
+    assert len(proc.vmstat.keys()) > 90
