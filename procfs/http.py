@@ -11,7 +11,7 @@ import argparse
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from SocketServer import ThreadingMixIn
 
-from procfs.exceptions import DoesNotExist
+from procfs.exceptions import PathNotFoundError
 from procfs import cli
 
 class ProcFSHandler(BaseHTTPRequestHandler):
@@ -25,7 +25,7 @@ class ProcFSHandler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(response)
-        except DoesNotExist as e:
+        except PathNotFoundError as e:
             self.send_error(404, "path %s does not exist" % e)
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):

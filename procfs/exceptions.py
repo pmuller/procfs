@@ -5,7 +5,7 @@ class BaseException(Exception):
     """Base exception"""
 
 
-class DoesNotExist(BaseException):
+class PathNotFoundError(BaseException):
     """The path does not exist"""
 
 

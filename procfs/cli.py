@@ -18,7 +18,7 @@ from procfs import Proc
 from procfs.core import ProcDirectory
 from procfs.core import ProcessDirectory
 
-from procfs.exceptions import DoesNotExist
+from procfs.exceptions import PathNotFoundError
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -35,17 +35,17 @@ def find(path, list):
             continue
         try:
             obj = obj.__getattr__(v)
-        except (KeyError, DoesNotExist, AttributeError) as e:
+        except (KeyError, PathNotFoundError, AttributeError) as e:
             try:
                 obj = obj.__getattr__(int(v))
-            except (KeyError, ValueError, DoesNotExist, AttributeError) as e:
+            except (KeyError, ValueError, PathNotFoundError, AttributeError) as e:
                 try:
                     obj = obj.__getitem__(v)
-                except (KeyError, DoesNotExist, AttributeError) as e:
+                except (KeyError, PathNotFoundError, AttributeError) as e:
                     try:
                         obj = obj.__getitem__(int(v))
-                    except (KeyError, ValueError, DoesNotExist, AttributeError) as e:
-                        raise DoesNotExist(path)
+                    except (KeyError, ValueError, PathNotFoundError, AttributeError) as e:
+                        raise PathNotFoundError(path)
         if callable(obj):
             obj = obj()
 
@@ -75,7 +75,7 @@ def run():
 
     try:
         print find(args.path, args.list)
-    except DoesNotExist as e:
+    except PathNotFoundError as e:
         print "couldn't find path %s" % e
         sys.exit(1)
     except AttributeError as e:

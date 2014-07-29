@@ -9,14 +9,14 @@ A set of simple tests that are executed against the real /proc directory
 import pytest
 
 import procfs
-from procfs.exceptions import DoesNotExist, NoParentProcess
+from procfs.exceptions import PathNotFoundError, NoParentProcess
 
 @pytest.fixture
 def proc():
     return procfs.Proc()
 
 def test_missing_file(proc):
-    with pytest.raises(DoesNotExist):
+    with pytest.raises(PathNotFoundError):
         proc.self.not_a_real_file
 
 def test_proc_self_id(proc):
