@@ -25,5 +25,5 @@ class UnknownProcessError(ProcessException):
     """The process does not exist"""
 
 
-class NoParentProcess(ProcessException):
+class NoParentProcessError(ProcessException):
     """The process has no parent process"""

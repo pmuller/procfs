@@ -8,7 +8,7 @@ from datetime import datetime
 from pprint import pformat
 
 from procfs.exceptions import \
-    PathNotFoundError, UnknownProcessError, NoParentProcess, PathNotADirectoryError, PathNotAFileError
+    PathNotFoundError, UnknownProcessError, NoParentProcessError, PathNotADirectoryError, PathNotAFileError
 from procfs.utils import get_module
 
 
@@ -326,7 +326,7 @@ class Process(ProcessDirectory):
         """
         ppid = self.stat.ppid
         if ppid == 0:
-            raise NoParentProcess(id)
+            raise NoParentProcessError(id)
         return Process(ppid)
 
     @property

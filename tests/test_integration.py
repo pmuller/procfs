@@ -9,7 +9,7 @@ A set of simple tests that are executed against the real /proc directory
 import pytest
 
 import procfs
-from procfs.exceptions import PathNotFoundError, NoParentProcess
+from procfs.exceptions import PathNotFoundError, NoParentProcessError
 
 @pytest.fixture
 def proc():
@@ -66,7 +66,7 @@ def test_proc_self_parent(proc):
 def test_processes_0(proc):
     p = proc.processes[0]
     assert p.id == 1
-    with pytest.raises(NoParentProcess):
+    with pytest.raises(NoParentProcessError):
         p.parent
 
 def test_processes_cmdline(proc):
