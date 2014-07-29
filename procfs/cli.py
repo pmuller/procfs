@@ -1,4 +1,13 @@
 
+"""
+.. module:: procfs.cli
+  :synopsis: procfs command line interface
+  :platform: Unix
+.. moduleauthor:: Robert Xu <robxu9@gmail.com>
+.. moduleauthor:: Jeff Lindsay <progrium@gmail.com>
+
+"""
+
 import argparse
 import json
 import sys
