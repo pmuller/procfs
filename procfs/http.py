@@ -1,4 +1,11 @@
 
+"""
+.. module:: procfs.http
+  :synopsis: procfs HTTP interface
+  :platform: Unix
+.. moduleauthor:: Robert Xu <robxu9@gmail.com>
+
+"""
 import argparse
 
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
