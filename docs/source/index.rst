@@ -6,9 +6,10 @@ A python API for the Linux /proc virtual filesystem.
 .. toctree::
     :maxdepth: 2
 
-
- .. automodule:: procfs
+.. automodule:: procfs
     :members:
+    :inherited-members:
+    :undoc-members:
 
  Indices and tables
  ==================
