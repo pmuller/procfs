@@ -11,14 +11,12 @@ import argparse
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from SocketServer import ThreadingMixIn
 
-from procfs import Proc
 from procfs.exceptions import DoesNotExist
 from procfs import cli
 
 class ProcFSHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
-        obj = Proc()
         path = self.path[1:]
 
         try:
