@@ -1,29 +1,24 @@
 """procfs exceptions"""
 
-
-class BaseException(Exception):
-    """Base exception"""
-
-
-class DoesNotExist(BaseException):
+class PathNotFoundError(Exception):
     """The path does not exist"""
 
 
-class NotDirectory(BaseException):
+class PathNotADirectoryError(Exception):
     """The path is not a directory"""
 
 
-class NotFile(BaseException):
+class PathNotAFileError(Exception):
     """The path is not a file"""
 
 
-class ProcessException(BaseException):
+class ProcessException(Exception):
     """Exceptions raised by process handling code"""
 
 
-class UnknownProcess(ProcessException):
+class UnknownProcessError(ProcessException):
     """The process does not exist"""
 
 
-class NoParentProcess(ProcessException):
+class NoParentProcessError(ProcessException):
     """The process has no parent process"""

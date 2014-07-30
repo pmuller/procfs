@@ -1,27 +1,23 @@
+
+"""
+.. module:: procfs.http
+  :synopsis: procfs HTTP interface
+  :platform: Unix
+.. moduleauthor:: Robert Xu <robxu9@gmail.com>
+
+"""
 import argparse
-import json
-import os
-import sys
-import string
-import socket
 
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from SocketServer import ThreadingMixIn
 
-from procfs import Proc
-from procfs.core import ProcDirectory
-from procfs.core import ProcessFile
-from procfs.core import File
-
-from procfs.exceptions import DoesNotExist
-
+from procfs.exceptions import PathNotFoundError
 from procfs import cli
 
 
 class ProcFSHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
-        obj = Proc()
         path = self.path[1:]
 
         try:
@@ -30,7 +26,7 @@ class ProcFSHandler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(response)
-        except DoesNotExist as e:
+        except PathNotFoundError as e:
             self.send_error(404, "path %s does not exist" % e)
 
 

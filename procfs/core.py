@@ -8,7 +8,7 @@ from datetime import datetime
 from pprint import pformat
 
 from procfs.exceptions import \
-    DoesNotExist, UnknownProcess, NoParentProcess, NotDirectory, NotFile
+    PathNotFoundError, UnknownProcessError, NoParentProcessError, PathNotADirectoryError, PathNotAFileError
 from procfs.utils import get_module
 
 
@@ -28,11 +28,11 @@ class BaseFile(object):
 
     def __init__(self, filepath):
         if not isinstance(filepath, basestring):
-            raise NotFile(filepath)
+            raise PathNotAFileError(filepath)
         elif not os.path.exists(filepath):
-            raise DoesNotExist(filepath)
+            raise PathNotFoundError(filepath)
         elif not os.path.isfile(filepath):
-            raise NotFile(filepath)
+            raise PathNotAFileError(filepath)
         self._filepath = filepath
         self._file = None
 
@@ -112,15 +112,15 @@ class BaseDirectory(object):
 
     def __init__(self, path):
         if not os.path.exists(path):
-            raise DoesNotExist(path)
+            raise PathNotFoundError(path)
         elif not os.path.isdir(path):
-            raise NotDirectory(path)
+            raise PathNotADirectoryError(path)
         self._dir = path
 
     def __getattr__(self, attr):
         path = os.path.join(self._dir, str(attr))
         if not os.path.exists(path):
-            raise DoesNotExist(path)
+            raise PathNotFoundError(path)
         elif os.path.islink(path):
             return self._handle_link(path)
         elif os.path.isdir(path):
@@ -312,7 +312,7 @@ class Process(ProcessDirectory):
     def __init__(self, id):
         path = '/proc/%s' % id
         if not os.path.isdir(path):
-            raise UnknownProcess(id)
+            raise UnknownProcessError(id)
         super(Process, self).__init__(id, path)
 
     def __repr__(self):
@@ -328,7 +328,7 @@ class Process(ProcessDirectory):
         """
         ppid = self.stat.ppid
         if ppid == 0:
-            raise NoParentProcess(id)
+            raise NoParentProcessError(id)
         return Process(ppid)
 
     @property
