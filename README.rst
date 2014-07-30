@@ -1,6 +1,11 @@
 procfs
 ------
 
+
+.. image:: https://secure.travis-ci.org/pmuller/procfs.png?branch=master
+    :target: http://travis-ci.org/pmuller/procfs
+    :alt: Build status
+
 .. image:: https://pypip.in/download/procfs/badge.png
     :target: https://pypi.python.org/pypi//procfs/
     :alt: Downloads
