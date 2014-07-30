@@ -1,18 +1,24 @@
+
+"""
+.. module:: procfs.cli
+  :synopsis: procfs command line interface
+  :platform: Unix
+.. moduleauthor:: Robert Xu <robxu9@gmail.com>
+.. moduleauthor:: Jeff Lindsay <progrium@gmail.com>
+
+"""
+
 import argparse
 import json
-import os
 import sys
-import string
 
 from datetime import timedelta
 
 from procfs import Proc
 from procfs.core import ProcDirectory
 from procfs.core import ProcessDirectory
-from procfs.core import ProcessFile
-from procfs.core import File
 
-from procfs.exceptions import DoesNotExist
+from procfs.exceptions import PathNotFoundError
 
 
 class CustomEncoder(json.JSONEncoder):
@@ -32,18 +38,19 @@ def find(path, list):
             continue
         try:
             obj = obj.__getattr__(v)
-        except (KeyError, DoesNotExist, AttributeError) as e:
+        except (KeyError, PathNotFoundError, AttributeError) as e:
             try:
                 obj = obj.__getattr__(int(v))
-            except (KeyError, ValueError, DoesNotExist, AttributeError) as e:
+            except (KeyError, ValueError,
+                    PathNotFoundError, AttributeError) as e:
                 try:
                     obj = obj.__getitem__(v)
-                except (KeyError, DoesNotExist, AttributeError) as e:
+                except (KeyError, PathNotFoundError, AttributeError) as e:
                     try:
                         obj = obj.__getitem__(int(v))
                     except (KeyError, ValueError,
-                            DoesNotExist, AttributeError) as e:
-                        raise DoesNotExist(path)
+                            PathNotFoundError, AttributeError) as e:
+                        raise PathNotFoundError(path)
         if callable(obj):
             obj = obj()
 
@@ -77,7 +84,7 @@ def run():
 
     try:
         print find(args.path, args.list)
-    except DoesNotExist as e:
+    except PathNotFoundError as e:
         print "couldn't find path %s" % e
         sys.exit(1)
     except AttributeError as e:
