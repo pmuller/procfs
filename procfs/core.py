@@ -11,6 +11,10 @@ from procfs.exceptions import \
     PathNotFoundError, UnknownProcessError, NoParentProcessError, PathNotADirectoryError, PathNotAFileError
 from procfs.utils import get_module
 
+try:
+    basestring
+except:
+    basestring = str
 
 DIGIT = re.compile('^\d+$')
 

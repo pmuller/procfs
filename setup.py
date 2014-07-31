@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import sys
 from setuptools import setup, find_packages
 
 def read(fname):
@@ -8,6 +9,10 @@ def read(fname):
 
 VERSION = [l for l in read('procfs/__init__.py').splitlines()
            if l.startswith('__version__ =')][0].split("'")[1]
+
+kw = {}
+if sys.version_info >= (3,):
+    kw['use_2to3'] = True
 
 setup(
     name='procfs',
@@ -34,5 +39,6 @@ setup(
         'Operating System :: POSIX :: Linux',
         'Topic :: System :: Operating System Kernels :: Linux',
         'Topic :: Software Development :: Libraries :: Python Modules',
-    ]
+    ],
+    **kw
 )
