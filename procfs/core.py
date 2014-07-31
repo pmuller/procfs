@@ -7,8 +7,8 @@ import pwd
 from datetime import datetime
 from pprint import pformat
 
-from procfs.exceptions import \
-    PathNotFoundError, UnknownProcessError, NoParentProcessError, PathNotADirectoryError, PathNotAFileError
+from procfs.exceptions import PathNotFoundError, UnknownProcessError, \
+    NoParentProcessError, PathNotADirectoryError, PathNotAFileError
 from procfs.utils import get_module
 
 try:

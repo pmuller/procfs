@@ -1,5 +1,6 @@
 """procfs exceptions"""
 
+
 class PathNotFoundError(Exception):
     """The path does not exist"""
 
