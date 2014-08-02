@@ -6,5 +6,11 @@ python:
 # command to install dependencies
 install:
   - "pip install ."
+  - pip install pytest
+  - pip install pytest-cov
+  - pip install pytest-xdist
+  - pip install tox
+
 # command to run tests
-script: py.test -v
+script:
+  - tox -e $TOX_ENV
