@@ -19,6 +19,12 @@ except:
 DIGIT = re.compile('^\d+$')
 
 
+def readfile(fn):
+    """Read file contents"""
+    with open(fn) as f:
+        return f.read()
+
+
 class Dict(dict):
     """A dict with access to its items like if they are attributes.
     """
@@ -38,14 +44,10 @@ class BaseFile(object):
         elif not os.path.isfile(filepath):
             raise PathNotAFileError(filepath)
         self._filepath = filepath
-        self._file = None
 
     def _read(self, parse=True):
         """Read and parse file content."""
-        if self._file is None:
-            self._file = open(self._filepath)
-        data = self._file.read()
-        self._file.seek(0)
+        data = readfile(self._filepath)
         if parse:
             return self._parse(data)
         else:
@@ -163,7 +165,7 @@ class BaseDirectory(object):
         raise NotImplementedError
 
     def _handle_raw_file(self, path):
-        return open(path).read()
+        return readfile(path)
 
     def _call_file_handler(self, handler):
         return handler()

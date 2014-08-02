@@ -1,0 +1,10 @@
+Type Device      Function
+ALL  wlan0    packet_rcv_spkt
+0800          ip_rcv
+0011          llc_rcv [llc]
+0004          llc_rcv [llc]
+00f5          phonet_rcv [phonet]
+0806          arp_rcv
+86dd          ipv6_rcv
+888e wlan0    packet_rcv
+888e wlan0    packet_rcv
