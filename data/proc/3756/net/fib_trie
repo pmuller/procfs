@@ -1,0 +1,26 @@
+Main:
+  +-- 0.0.0.0/0 2 0 1
+     |-- 0.0.0.0
+        /0 universe UNICAST
+     |-- 169.254.0.0
+        /16 link UNICAST
+     |-- 192.168.1.0
+        /24 link UNICAST
+Local:
+  +-- 0.0.0.0/0 1 0 0
+     +-- 127.0.0.0/8 1 0 0
+        +-- 127.0.0.0/31 1 0 0
+           |-- 127.0.0.0
+              /32 link BROADCAST
+              /8 host LOCAL
+           |-- 127.0.0.1
+              /32 host LOCAL
+        |-- 127.255.255.255
+           /32 link BROADCAST
+     +-- 192.168.1.0/24 2 0 1
+        |-- 192.168.1.0
+           /32 link BROADCAST
+        |-- 192.168.1.100
+           /32 host LOCAL
+        |-- 192.168.1.255
+           /32 link BROADCAST
