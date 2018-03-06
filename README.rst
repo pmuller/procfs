@@ -6,15 +6,15 @@ procfs
     :target: http://travis-ci.org/pmuller/procfs
     :alt: Build status
 
-.. image:: https://pypip.in/download/procfs/badge.png
+.. image:: https://img.shields.io/pypi/dm/procfs.svg
     :target: https://pypi.python.org/pypi//procfs/
     :alt: Downloads
 
-.. image:: https://pypip.in/version/procfs/badge.png
+.. image:: https://img.shields.io/pypi/v/procfs.svg
     :target: https://pypi.python.org/pypi/procfs/
     :alt: Latest Version
 
-.. image:: https://pypip.in/license/procfs/badge.png
+.. image:: https://img.shields.io/pypi/l/procfs.svg
     :target: https://pypi.python.org/pypi/procfs/
     :alt: License
 
